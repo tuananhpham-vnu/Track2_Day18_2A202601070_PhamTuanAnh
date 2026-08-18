@@ -50,6 +50,10 @@ def reset(*paths: str) -> None:
 
 ICEBERG_ROOT = ROOT / "iceberg"
 
+# name → the SqlCatalog objects handed out under it. reset_catalog() disposes
+# them before deleting the directory; see the note there.
+_OPEN_CATALOGS: dict[str, list] = {}
+
 
 def _catalog_dir(name: str) -> Path:
     """Each caller gets its OWN catalog directory.
@@ -79,19 +83,34 @@ def catalog(name: str = "lab"):
 
     d = _catalog_dir(name)
     (d / "warehouse").mkdir(parents=True, exist_ok=True)
-    return SqlCatalog(
+    cat = SqlCatalog(
         name,
         uri=f"sqlite:///{d / 'catalog.db'}",
         warehouse=f"file://{d / 'warehouse'}",
     )
+    # Remembered so reset_catalog() can close the SQLite handle first — see there.
+    _OPEN_CATALOGS.setdefault(name, []).append(cat)
+    return cat
 
 
 def reset_catalog(name: str = "lab") -> None:
     """Drop ONE catalog so a notebook rerun starts clean.
 
     Scoped to `name` on purpose — see `_catalog_dir`.
+
+    Every SqlCatalog we handed out for this name is disposed first. SQLAlchemy
+    pools its SQLite connections, so `catalog.db` stays open until the engine
+    is told to let go. POSIX unlinks an open file happily; Windows raises
+    WinError 32, and `ignore_errors=True` would swallow it — leaving the
+    "reset" catalog fully populated and the notebook reading stale state on
+    its second run. Dispose, then delete.
     """
     import shutil
+
+    for cat in _OPEN_CATALOGS.pop(name, []):
+        engine = getattr(cat, "engine", None)
+        if engine is not None:
+            engine.dispose()
 
     shutil.rmtree(_catalog_dir(name), ignore_errors=True)
 

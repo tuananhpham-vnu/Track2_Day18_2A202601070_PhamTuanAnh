@@ -6,6 +6,7 @@ the instructor runs before grading.
 """
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 import time
@@ -13,6 +14,13 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 NB_DIR = ROOT / "notebooks"
+
+# The notebooks print UTF-8 (✓, →, ≥, box drawing). On Windows the child's
+# stdout is a pipe, so Python picks the ANSI codepage (cp1252) for it and every
+# notebook dies on its first `print` with UnicodeEncodeError — 0/8, with the
+# real error hidden behind a decode failure in this process's reader thread.
+# Pin UTF-8 on both ends: the child encodes it, we decode it.
+CHILD_ENV = {**os.environ, "PYTHONIOENCODING": "utf-8"}
 
 
 def main() -> int:
@@ -25,7 +33,8 @@ def main() -> int:
     failures, total = [], 0.0
     for nb in notebooks:
         t0 = time.perf_counter()
-        proc = subprocess.run([sys.executable, str(nb)], capture_output=True, text=True)
+        proc = subprocess.run([sys.executable, str(nb)], capture_output=True, text=True,
+                              encoding="utf-8", errors="replace", env=CHILD_ENV)
         dt = time.perf_counter() - t0
         total += dt
         if proc.returncode == 0:

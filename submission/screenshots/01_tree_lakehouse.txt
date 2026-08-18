@@ -1,0 +1,268 @@
+$ tree _lakehouse/   (lightweight path — same on-disk Delta/Iceberg format Spark writes)
+
+_lakehouse/
+    blobs/
+        frame_0000.bin  (64.0 KB)
+        frame_0001.bin  (64.0 KB)
+        frame_0002.bin  (64.0 KB)
+        frame_0003.bin  (64.0 KB)
+        frame_0004.bin  (64.0 KB)
+        frame_0005.bin  (64.0 KB)
+        ... and 194 more files (12.1 MB)
+    bronze/
+        agent_traces/
+            part-00000-6f932e3a-ec29-4bfc-93dd-6d0749fb7606-c000.snappy.parquet  (28.8 KB)
+            _delta_log/
+                00000000000000000000.json  (2.1 KB)
+        docs_multimodal/
+            part-00000-dc884f90-c2d2-4dac-be12-0adc06dac9e7-c000.snappy.parquet  (2.6 MB)
+            _delta_log/
+                00000000000000000000.json  (2.4 KB)
+        llm_calls_raw/
+            part-00000-cfe958eb-07a3-4c9d-b62e-d1aac90abeaa-c000.snappy.parquet  (13.3 MB)
+            _delta_log/
+                00000000000000000000.json  (1.6 KB)
+    gold/
+        agent_performance/
+            part-00000-4abc2b49-51e4-4112-ac29-08b4717e4e34-c000.snappy.parquet  (2.4 KB)
+            _delta_log/
+                00000000000000000000.json  (1.9 KB)
+        llm_daily_metrics/
+            _delta_log/
+                00000000000000000000.json  (8.7 KB)
+                00000000000000000001.json  (9.9 KB)
+            date=2026-04-01/
+                part-00000-0516673a-8b19-4bdd-91c0-8030394c3f3d-c000.snappy.parquet  (2.6 KB)
+                part-00000-ef9ebf05-db1f-4c16-bee9-50b87f7e968e-c000.zstd.parquet  (2.7 KB)
+            date=2026-04-02/
+                part-00000-2c5b1565-d72f-40b2-bec0-07b4312aa236-c000.snappy.parquet  (2.6 KB)
+                part-00000-ea253673-7a7e-4550-9884-09b9f1f155b0-c000.zstd.parquet  (2.7 KB)
+            date=2026-04-03/
+                part-00000-bdc464f9-f63e-4176-bbea-c9a45c9937fc-c000.snappy.parquet  (2.6 KB)
+                part-00000-d0acafdc-08aa-400c-8c11-4d467d79b2c5-c000.zstd.parquet  (2.7 KB)
+            date=2026-04-04/
+                part-00000-9c9e553d-70b1-4c96-a9fc-1327c495f146-c000.snappy.parquet  (2.6 KB)
+                part-00000-a7847798-3a10-448a-8be1-27a4d297c0e0-c000.zstd.parquet  (2.7 KB)
+            date=2026-04-05/
+                part-00000-15f675e0-7689-46f6-8482-3598c4cdfd40-c000.zstd.parquet  (2.7 KB)
+                part-00000-45d70f3b-f5c4-443e-8269-7791c1623832-c000.snappy.parquet  (2.6 KB)
+            date=2026-04-06/
+                part-00000-148270ef-07e6-4fe2-b4de-440b840bcbf9-c000.zstd.parquet  (2.7 KB)
+                part-00000-99bcfa30-7457-414d-abc3-ca431b8f4d26-c000.snappy.parquet  (2.6 KB)
+            date=2026-04-07/
+                part-00000-146b6e22-428e-4de2-b492-84e1d3ff300d-c000.zstd.parquet  (2.7 KB)
+                part-00000-46451e79-1307-416e-a60e-de26c12fa94b-c000.snappy.parquet  (2.6 KB)
+            date=2026-04-08/
+                part-00000-31afd8e8-06f7-4228-8a24-e352e8fd0419-c000.snappy.parquet  (2.6 KB)
+                part-00000-6133ebee-10e1-48a6-8270-4b503527d546-c000.zstd.parquet  (2.7 KB)
+    iceberg/
+        nb5/
+            catalog.db  (20.0 KB)
+            warehouse/
+                lake/
+                    llm_events/
+                        data/
+                            ts_day=2026-08-01/
+                                00000-0-60259b95-17e5-46a6-a853-9f640af15caa.parquet  (4.7 KB)
+                            ts_day=2026-08-02/
+                                00000-0-2dd3247c-7942-464c-816e-d0fc9871574a.parquet  (4.7 KB)
+                            ts_day=2026-08-03/
+                                00000-0-54128ad8-ec8c-4426-b683-742f161a382d.parquet  (4.7 KB)
+                            ts_day=2026-08-04/
+                                00000-0-2219b3bb-3681-406b-9e4f-ebd80df1c458.parquet  (4.7 KB)
+                            ts_day=2026-08-05/
+                                00000-0-1480e017-6d32-459f-adaf-f25a9b4d2290.parquet  (4.7 KB)
+                            ts_day=2026-08-06/
+                                00000-0-6e112f4e-7b4d-485c-b5d4-467901bbc2a1.parquet  (4.7 KB)
+                            ts_day=2026-08-07/
+                                00000-0-dd07ac35-8530-4629-9bfb-2ddd4249c0a6.parquet  (4.7 KB)
+                            ts_day=2026-08-08/
+                                00000-0-c33b9c59-2b43-44e7-ac30-6df705818f6a.parquet  (4.7 KB)
+                            ts_day=2026-08-09/
+                                00000-0-e5c41b11-e077-404c-9ebd-7c91b93e73f0.parquet  (4.7 KB)
+                            ts_day=2026-08-10/
+                                00000-0-4131f511-32d5-47e1-a795-feb6b7d95017.parquet  (4.7 KB)
+                            ts_day=2026-08-11/
+                                model_id=claude-haiku-4-5/
+                                    00000-0-f1a33028-1c42-4d7d-8888-c90e75c8d2f4.parquet  (3.4 KB)
+                                model_id=claude-opus-4-7/
+                                    00000-2-f1a33028-1c42-4d7d-8888-c90e75c8d2f4.parquet  (3.4 KB)
+                                model_id=claude-sonnet-4-6/
+                                    00000-1-f1a33028-1c42-4d7d-8888-c90e75c8d2f4.parquet  (3.5 KB)
+                        metadata/
+                            00000-8ae36b55-6417-4c29-b6bb-13b06ec534c7.metadata.json  (969 B)
+                            00001-4ddafbe7-3c16-4d5a-ad6a-d1b2b6d16cf0.metadata.json  (1.3 KB)
+                            00002-71a6a70d-5537-40d8-858d-02ffbd1c4104.metadata.json  (2.3 KB)
+                            00003-a6246ac2-f294-4e5c-9bca-e3c083357b31.metadata.json  (3.2 KB)
+                            00004-ae1fd370-31e0-4618-87e1-e516ea8bf786.metadata.json  (4.2 KB)
+                            00005-1bae0a70-d71c-4c15-b318-2938a9f0c9d8.metadata.json  (5.2 KB)
+                            ... and 32 more files (177.2 KB)
+        nb6/
+            catalog.db  (20.0 KB)
+            warehouse/
+                lake/
+                    maint/
+                        data/
+                            00000-0-0c548c8a-5366-4a4f-845a-2c6d79e99f23.parquet  (1.5 KB)
+                            00000-0-173763df-b6eb-40ea-8a9e-d2a027164691.parquet  (1.4 KB)
+                            00000-0-180627a9-c4f3-4d79-bf3a-608f79672d79.parquet  (1.4 KB)
+                            00000-0-1b74adea-fcd0-4fca-99d6-bd327f90d4e0.parquet  (1.4 KB)
+                            00000-0-1ba72256-7deb-4e5b-ae29-c8f9a057fae5.parquet  (1.4 KB)
+                            00000-0-240ebbb2-8a1e-4cde-a385-9bb2cab90072.parquet  (1.5 KB)
+                            ... and 14 more files (20.4 KB)
+                        metadata/
+                            00000-5452c056-336d-4936-9614-5db2a64a1f93.metadata.json  (788 B)
+                            00001-0cce13c4-f400-4910-a3d3-62d6cd2c2340.metadata.json  (1.7 KB)
+                            00002-9daf7b71-9ce7-4ff8-9fad-15ede714481b.metadata.json  (2.7 KB)
+                            00003-eb995cd6-ec31-4536-a8bf-608deefbdea2.metadata.json  (3.6 KB)
+                            00004-dfdae907-f4d8-4d85-b286-361aea496f86.metadata.json  (4.5 KB)
+                            00005-56e401b1-9a4a-4b02-9632-b27f550d7851.metadata.json  (5.4 KB)
+                            ... and 39 more files (292.1 KB)
+        nb8/
+            catalog.db  (20.0 KB)
+            warehouse/
+                lake/
+                    trajectories/
+                        data/
+                            00000-0-6731a45d-02b9-4353-a7f1-11884144b680.parquet  (1.9 KB)
+                        metadata/
+                            00000-dc4bffd2-c908-4ac1-a4a1-f6c35774c6a1.metadata.json  (868 B)
+                            00001-0d59e613-e39c-4217-888b-e02b60bbcabd.metadata.json  (1.8 KB)
+                            6731a45d-02b9-4353-a7f1-11884144b680-m0.avro  (4.4 KB)
+                            snap-688186223274378980-0-6731a45d-02b9-4353-a7f1-11884144b680.avro  (1.8 KB)
+    scratch/
+        customers_tt/
+            part-00000-19ec2f16-c328-49a0-9768-9e8ac3ee4123-c000.snappy.parquet  (608.2 KB)
+            part-00000-496daf36-dccd-4aba-9ba6-cf7189504c62-c000.snappy.parquet  (608.8 KB)
+            part-00000-656f6350-289e-4646-bf6f-8dfb8830244a-c000.snappy.parquet  (867.3 KB)
+            part-00000-c8e29ae1-9ac8-42e4-9fd4-24044f407b92-c000.snappy.parquet  (1.5 KB)
+            _delta_log/
+                00000000000000000000.json  (1.3 KB)
+                00000000000000000001.json  (1.6 KB)
+                00000000000000000002.json  (1.5 KB)
+                00000000000000000003.json  (790 B)
+                00000000000000000004.json  (1.0 KB)
+        docs_cdf/
+            part-00000-1dbd4716-53f6-45a0-9aa7-7093762b0054-c000.snappy.parquet  (12.7 KB)
+            part-00000-f47895ce-5907-4b7e-a5a4-754858969d55-c000.zstd.parquet  (7.3 KB)
+            _change_data/
+                part-00000-065df495-c656-4829-acb1-c042e8e22884-c000.zstd.parquet  (1.2 KB)
+            _delta_log/
+                00000000000000000000.json  (1.2 KB)
+                00000000000000000001.json  (1.2 KB)
+        docs_intable/
+            part-00000-42bb10d4-6dc8-45e1-95d1-651c247a9ba5-c000.snappy.parquet  (2.6 MB)
+            part-00000-d2f66b5d-fc56-40dd-a9f1-4f6707a8644d-c000.zstd.parquet  (2.4 MB)
+            _delta_log/
+                00000000000000000000.json  (2.4 KB)
+                00000000000000000001.json  (1.5 KB)
+        emb_f32/
+            part-00000-ae1d4165-832e-4a03-819a-75873523f0a6-c000.snappy.parquet  (2.6 MB)
+            _delta_log/
+                00000000000000000000.json  (1.2 KB)
+        emb_int8/
+            part-00000-cf0a0587-21b1-4100-8b65-dcbd141089de-c000.snappy.parquet  (450.7 KB)
+            _delta_log/
+                00000000000000000000.json  (1.2 KB)
+        events_smallfiles/
+            part-00000-00703c87-67b5-4033-90d1-7435c7730b1e-c000.snappy.parquet  (64.5 KB)
+            part-00000-00e43362-13cb-4aad-bad2-99ada8710c0f-c000.zstd.parquet  (119.6 KB)
+            part-00000-0111828f-e5b9-4855-9e1f-fa8a82150f1e-c000.snappy.parquet  (64.4 KB)
+            part-00000-016b64da-2794-442d-851b-df84318bb692-c000.snappy.parquet  (64.4 KB)
+            part-00000-017995ff-3cc8-4515-a179-2a1575ffdb2d-c000.snappy.parquet  (64.4 KB)
+            part-00000-019d78d6-169f-44a4-9f31-a2635a3574d0-c000.snappy.parquet  (64.5 KB)
+            ... and 316 more files (26.4 MB)
+            _delta_log/
+                00000000000000000000.json  (1.5 KB)
+                00000000000000000001.json  (957 B)
+                00000000000000000002.json  (959 B)
+                00000000000000000003.json  (958 B)
+                00000000000000000004.json  (959 B)
+                00000000000000000005.json  (959 B)
+                ... and 199 more files (474.9 KB)
+        maint_events/
+            part-00000-3c7b477e-52a5-4231-96e3-3729c469c86e-c000.zstd.parquet  (649.8 KB)
+            part-00001-3c7b477e-52a5-4231-96e3-3729c469c86e-c000.zstd.parquet  (648.2 KB)
+            part-00002-3c7b477e-52a5-4231-96e3-3729c469c86e-c000.zstd.parquet  (649.5 KB)
+            part-00003-3c7b477e-52a5-4231-96e3-3729c469c86e-c000.zstd.parquet  (648.7 KB)
+            part-00004-3c7b477e-52a5-4231-96e3-3729c469c86e-c000.zstd.parquet  (649.6 KB)
+            part-00005-3c7b477e-52a5-4231-96e3-3729c469c86e-c000.zstd.parquet  (648.9 KB)
+            part-00006-3c7b477e-52a5-4231-96e3-3729c469c86e-c000.zstd.parquet  (648.2 KB)
+            part-00007-3c7b477e-52a5-4231-96e3-3729c469c86e-c000.zstd.parquet  (648.3 KB)
+            part-00008-3c7b477e-52a5-4231-96e3-3729c469c86e-c000.zstd.parquet  (648.0 KB)
+            part-00009-3c7b477e-52a5-4231-96e3-3729c469c86e-c000.zstd.parquet  (498.5 KB)
+            _delta_log/
+                00000000000000000000.json  (1.8 KB)
+                00000000000000000001.json  (1.0 KB)
+                00000000000000000002.json  (1.0 KB)
+                00000000000000000003.json  (1.0 KB)
+                00000000000000000004.json  (1.0 KB)
+                00000000000000000005.json  (1.0 KB)
+                ... and 202 more files (470.6 KB)
+        media_inline/
+            part-00000-43aa1d7c-9a08-4f8e-9936-bd2d522246e6-c000.snappy.parquet  (12.5 MB)
+            _delta_log/
+                00000000000000000000.json  (1.2 KB)
+        media_pointer/
+            part-00000-25ca91a5-7a16-4a04-a36c-961c4c29bd3b-c000.snappy.parquet  (3.4 KB)
+            _delta_log/
+                00000000000000000000.json  (1.3 KB)
+        users_delta/
+            part-00000-299e04a2-8e18-4bd6-9dbd-38656fafd6e1-c000.snappy.parquet  (1.5 KB)
+            part-00000-7a305ed5-3935-47d5-bd63-e6b0155203d9-c000.snappy.parquet  (1.4 KB)
+            _delta_log/
+                00000000000000000000.json  (1.4 KB)
+                00000000000000000001.json  (1.4 KB)
+        vector_index_external/
+            part-00000-8da6ddc5-566c-47ee-bfab-74f2dc8432a8-c000.snappy.parquet  (2.6 MB)
+            _delta_log/
+                00000000000000000000.json  (1.2 KB)
+    silver/
+        agent_trajectories/
+            _delta_log/
+                00000000000000000000.json  (3.2 KB)
+                00000000000000000001.json  (1.2 KB)
+            agent_version=policy-v2/
+                part-00000-95a74c57-5e93-4ce4-a98a-b33f6e810b8b-c000.snappy.parquet  (20.7 KB)
+                part-00000-fc4c7fdc-a538-4564-8c72-b915078237e8-c000.snappy.parquet  (12.1 KB)
+            agent_version=policy-v3/
+                part-00000-2f528655-d59f-4461-8478-c621e9c41be9-c000.snappy.parquet  (20.7 KB)
+        llm_calls/
+            _delta_log/
+                00000000000000000000.json  (8.9 KB)
+            date=2026-04-01/
+                part-00000-a0d3585a-b894-4805-bcee-043491a9c7b5-c000.snappy.parquet  (1.0 MB)
+            date=2026-04-02/
+                part-00000-d2b3118b-4a80-417c-aa5a-7787a7d6718a-c000.snappy.parquet  (1.4 MB)
+            date=2026-04-03/
+                part-00000-67b6afc1-9c31-45a4-b966-8852c9c046fd-c000.snappy.parquet  (1.4 MB)
+            date=2026-04-04/
+                part-00000-db427848-95b4-4152-a1ba-009a3254a1c3-c000.snappy.parquet  (1.4 MB)
+            date=2026-04-05/
+                part-00000-03eb4638-e674-4875-897f-970dab558104-c000.snappy.parquet  (1.4 MB)
+            date=2026-04-06/
+                part-00000-ac6fa171-acf9-4190-9827-cabb15197e23-c000.snappy.parquet  (1.4 MB)
+            date=2026-04-07/
+                part-00000-0e2b82ab-3320-46d8-a6e0-4b7621220997-c000.snappy.parquet  (1.4 MB)
+            date=2026-04-08/
+                part-00000-94211016-3141-4248-8d3d-dbcde31b6773-c000.snappy.parquet  (456.0 KB)
+        training_corpus_governed/
+            _delta_log/
+                00000000000000000000.json  (5.7 KB)
+                00000000000000000001.json  (4.9 KB)
+            provenance_bucket=UNCLASSIFIED/
+                part-00000-25eab3df-3c5d-46e2-8594-9d843018d0b2-c000.zstd.parquet  (5.8 KB)
+                part-00000-7fcdbc3c-a982-4680-9a31-b77dc8708838-c000.snappy.parquet  (8.1 KB)
+            provenance_bucket=licensed/
+                part-00000-58f25261-3d8a-4076-b076-007a1c97c494-c000.snappy.parquet  (13.2 KB)
+                part-00000-e6ede9bf-9f26-4c82-aff6-2d8e881918c8-c000.zstd.parquet  (9.1 KB)
+            provenance_bucket=public_domain/
+                part-00000-e446f00f-fe08-4b45-b7b3-f454bae8db97-c000.snappy.parquet  (8.1 KB)
+            provenance_bucket=scraped_optout_checked/
+                part-00000-c6ddac52-4c99-4653-b950-37ab22736a57-c000.snappy.parquet  (8.0 KB)
+                part-00000-ee909897-60e0-4184-9ffa-27bbc84d9e5e-c000.zstd.parquet  (5.8 KB)
+            provenance_bucket=synthetic/
+                part-00000-951ad7d1-df77-4023-875b-0e60fdbd9328-c000.snappy.parquet  (8.2 KB)
+                part-00000-cc35bcb4-9feb-4821-869e-9efedd8079b1-c000.zstd.parquet  (6.0 KB)
+
+Total: 1152 files, 98.4 MB

@@ -1,0 +1,159 @@
+$ cat _lakehouse/silver/llm_calls/_delta_log/00000000000000000000.json
+# The Delta transaction log: one JSON line per action, the ACID unit.
+# Byte-identical in format to what Spark/Databricks writes.
+
+--- action: commitInfo ---
+{
+  "commitInfo": {
+    "timestamp": 1787043367033,
+    "operation": "WRITE",
+    "operationParameters": {
+      "partitionBy": "[\"date\"]",
+      "mode": "Overwrite"
+    },
+    "engineInfo": "delta-rs:py-1.6.2",
+    "operationMetrics": {
+      "execution_time_ms": 239,
+      "num_added_files": 8,
+      "num_added_rows": 190052,
+      "num_partitions": 0,
+      "num_removed_files": 0
+    },
+    "clientVersion": "delta-rs.py-1.6.2"
+  }
+}
+
+--- action: protocol ---
+{
+  "protocol": {
+    "minReaderVersion": 1,
+    "minWriterVersion": 2
+  }
+}
+
+--- action: metaData ---
+{
+  "metaData": {
+    "id": "7e0856b1-fbe2-4cbc-8e1b-550f290b1f39",
+    "name": null,
+    "description": null,
+    "format": {
+      "provider": "parquet",
+      "options": {}
+    },
+    "schemaString": "{\"type\":\"struct\",\"fields\":[{\"name\":\"request_id\",\"type\":\"string\",\"nullable\":true,\"metadata\":{}},{\"name\":\"ts\",\"type\":\"timestamp\",\"nullable\":true,\"metadata\":{}},{\"name\":\"date\",\"type\":\"date\",\"nullable\":true,\"metadata\":{}},{\"name\":\"model\",\"type\":\"string\",\"nullable\":true,\"metadata\":{}},{\"name\":\"user_id\",\"type\":\"string\",\"nullable\":true,\"metadata\":{}},{\"name\":\"prompt_tokens\",\"type\":\"integer\",\"nullable\":true,\"metadata\":{}},{\"name\":\"completion_tokens\",\"type\":\"integer\",\"nullable\":true,\"metadata\":{}},{\"name\":\"latency_ms\",\"type\":\"integer\",\"nullable\":true,\"metadata\":{}},{\"name\":\"status\",\"type\":\"string\",\"nullable\":true,\"metadata\":{}}]}",
+    "partitionColumns": [
+      "date"
+    ],
+    "createdTime": 1787043366793,
+    "configuration": {}
+  }
+}
+
+--- action: add ---
+{
+  "add": {
+    "path": "date=2026-04-01/part-00000-a0d3585a-b894-4805-bcee-043491a9c7b5-c000.snappy.parquet",
+    "partitionValues": {
+      "date": "2026-04-01"
+    },
+    "size": 1076100,
+    "modificationTime": 1787043367013,
+    "dataChange": true,
+    "stats": {
+      "numRecords": 19271,
+      "minValues": {
+        "status": "error",
+        "ts": "2026-04-01T00:00:00Z",
+        "user_id": "u_1",
+        "latency_ms": 50,
+        "request_id": "0003023a-fdfb-4bdc-b428-693f249bae92",
+        "model": "claude-haiku-4-5",
+        "prompt_tokens": 50,
+        "completion_tokens": 20
+      },
+      "maxValues": {
+        "status": "rate_limited",
+        "user_id": "u_999",
+        "model": "claude-sonnet-4-6",
+        "latency_ms": 8103,
+        "prompt_tokens": 4000,
+        "request_id": "fffd471f-2868-45dd-9d1b-780f7a5b67f7",
+        "completion_tokens": 2000,
+        "ts": "2026-04-01T16:59:59Z"
+      },
+      "nullCount": {
+        "prompt_tokens": 0,
+        "ts": 0,
+        "user_id": 0,
+        "completion_tokens": 0,
+        "status": 0,
+        "latency_ms": 0,
+        "model": 0,
+        "request_id": 0
+      }
+    },
+    "tags": null,
+    "baseRowId": null,
+    "defaultRowCommitVersion": null,
+    "clusteringProvider": null
+  }
+}
+
+--- action: add ---
+{
+  "add": {
+    "path": "date=2026-04-02/part-00000-d2b3118b-4a80-417c-aa5a-7787a7d6718a-c000.snappy.parquet",
+    "partitionValues": {
+      "date": "2026-04-02"
+    },
+    "size": 1492789,
+    "modificationTime": 1787043367014,
+    "dataChange": true,
+    "stats": {
+      "numRecords": 27199,
+      "minValues": {
+        "user_id": "u_1",
+        "latency_ms": 50,
+        "prompt_tokens": 50,
+        "status": "error",
+        "request_id": "0000130a-69f9-4e1f-a210-51804b8ff06f",
+        "model": "claude-haiku-4-5",
+        "completion_tokens": 20,
+        "ts": "2026-04-01T17:00:02Z"
+      },
+      "maxValues": {
+        "user_id": "u_999",
+        "status": "rate_limited",
+        "ts": "2026-04-02T16:59:58Z",
+        "model": "claude-sonnet-4-6",
+        "completion_tokens": 2000,
+        "prompt_tokens": 4000,
+        "latency_ms": 8278,
+        "request_id": "fffcc942-b907-422e-8c03-75dd9ad297f7"
+      },
+      "nullCount": {
+        "status": 0,
+        "user_id": 0,
+        "prompt_tokens": 0,
+        "request_id": 0,
+        "ts": 0,
+        "latency_ms": 0,
+        "model": 0,
+        "completion_tokens": 0
+      }
+    },
+    "tags": null,
+    "baseRowId": null,
+    "defaultRowCommitVersion": null,
+    "clusteringProvider": null
+  }
+}
+
+[... 6 further `add` actions elided — one per date= partition]
+
+Read this log:
+  protocol   — reader/writer version the table demands
+  metaData   — the schema; this is what enforcement checks writes against
+  add.stats  — per-file min/max + nullCount. This is the file-skipping
+               data NB2/NB6 measure pruning from — no data read required.

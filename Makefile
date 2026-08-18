@@ -2,12 +2,33 @@
 ## Two paths: lightweight (default, pure Python) and Spark (Docker, optional).
 
 VENV       := .venv
-PY         := $(VENV)/bin/python
-PIP        := $(VENV)/bin/pip
-JUPYTER    := $(VENV)/bin/jupyter
-JUPYTEXT   := $(VENV)/bin/jupytext
-PYTEST     := $(VENV)/bin/pytest
+# venv layout differs by OS: Windows puts entry points in Scripts/, POSIX in bin/
+ifeq ($(OS),Windows_NT)
+BIN        := $(VENV)/Scripts
+EXE        := .exe
+# Every recipe here is POSIX sh, but GNU make defaults to SHELL=sh.exe and
+# silently falls back to cmd.exe when that is not on PATH (i.e. whenever make
+# is launched from PowerShell rather than Git Bash). Locate Git's sh.exe via
+# 8.3 paths, which have no spaces for $(wildcard) to split on.
+GIT_SH     := $(firstword $(wildcard C:/PROGRA~1/Git/usr/bin/sh.exe C:/PROGRA~2/Git/usr/bin/sh.exe C:/Git/usr/bin/sh.exe))
+ifneq ($(GIT_SH),)
+SHELL      := $(GIT_SH)
+else
+$(warning No POSIX sh.exe found. Run make from Git Bash, or: make SHELL=/path/to/sh.exe)
+endif
+else
+BIN        := $(VENV)/bin
+EXE        :=
+endif
+PY         := $(BIN)/python$(EXE)
+PIP        := $(BIN)/pip$(EXE)
+JUPYTER    := $(BIN)/jupyter$(EXE)
+JUPYTEXT   := $(BIN)/jupytext$(EXE)
+PYTEST     := $(BIN)/pytest$(EXE)
 COMPOSE    := docker compose -f docker/docker-compose.yml
+
+# scripts print ✓/✗/→; Windows consoles default to cp1252 and crash on them
+export PYTHONIOENCODING := utf-8
 
 .DEFAULT_GOAL := help
 
@@ -20,11 +41,11 @@ help: ## Show this help
 # ─────────────────────────────────────────────────────────────
 
 setup: ## [lite] Create venv + install deps (~180 MB, ~20s with pip / ~4s with uv)
-	@command -v uv >/dev/null 2>&1 && uv venv $(VENV) --python '>=3.10,<3.15' || python3 -m venv $(VENV)
+	@if [ ! -x "$(PY)" ]; then command -v uv >/dev/null 2>&1 && uv venv $(VENV) --python '>=3.10,<3.15' || python3 -m venv $(VENV) || py -3 -m venv $(VENV); else echo "  venv already present - reusing it ('make clean' to rebuild)"; fi
 	@$(PY) -c 'import sys; raise SystemExit(0 if (3,10)<=sys.version_info[:2]<(3,15) else 1)' \
 	  || { echo "ERROR: need Python 3.10-3.14. Install 'uv' (auto-fetches one) or run: python3.12 -m venv .venv"; exit 1; }
 	@command -v uv >/dev/null 2>&1 && uv pip install --python $(PY) -r requirements.txt \
-	  || $(PIP) install -q -r requirements.txt
+	  || $(PY) -m pip install -q -r requirements.txt
 	@$(JUPYTEXT) --to notebook --update notebooks/*.py 2>/dev/null || $(JUPYTEXT) --to notebook notebooks/*.py
 	@echo ""
 	@echo "  ✓ Setup complete. Run 'make smoke' then 'make lab'."
