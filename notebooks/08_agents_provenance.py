@@ -30,13 +30,13 @@ import polars as pl
 import pyarrow as pa
 from deltalake import DeltaTable, write_deltalake
 
-from lakehouse import catalog, namespace, path, reset, reset_catalog, to_arrow
+from lakehouse import catalog, is_delta_table, namespace, path, reset, reset_catalog, to_arrow
 
 import generate_ai_data as gen
 
 TRACES = path("bronze", "agent_traces")
 DOCS = path("bronze", "docs_multimodal")
-if not Path(TRACES).exists() or not Path(DOCS).exists():
+if not is_delta_table(TRACES) or not is_delta_table(DOCS):
     gen.main()
 
 con = duckdb.connect()

@@ -32,12 +32,12 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 from deltalake import DeltaTable, write_deltalake
 
-from lakehouse import ROOT, du, human, path, reset
+from lakehouse import ROOT, du, human, is_delta_table, path, reset
 
 import generate_ai_data as gen
 
 DOCS = path("bronze", "docs_multimodal")
-if not Path(DOCS).exists():
+if not is_delta_table(DOCS):
     gen.main()
 
 docs = DeltaTable(DOCS).to_pyarrow_table()

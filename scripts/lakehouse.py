@@ -26,10 +26,42 @@ def path(layer: str, table: str) -> str:
 
 
 def reset(*paths: str) -> None:
-    """Delete tables (idempotent rerun support). No-op if missing."""
+    """Delete tables (idempotent rerun support). No-op if missing.
+
+    Windows needs the retry loop. delta-rs/pyarrow keep handles open on the
+    parquet files they read; Windows honours the unlink but refuses to rmdir a
+    directory whose files are still marked delete-pending, so a plain
+    `rmtree(ignore_errors=True)` silently leaves a *hollow* table behind —
+    every directory present, every file gone. The next run then sees the path
+    exists, skips its self-healing regeneration, and dies inside the Rust layer
+    with "No files in log segment". Retry, then verify.
+    """
     import shutil
+    import time
+
     for p in paths:
-        shutil.rmtree(p, ignore_errors=True)
+        for attempt in range(5):
+            shutil.rmtree(p, ignore_errors=(attempt < 4))
+            if not Path(p).exists():
+                break
+            time.sleep(0.2 * (attempt + 1))  # let the pending deletes land
+        else:
+            # Still there after 5 tries: a live handle we cannot wait out.
+            # Loud beats a hollow directory poisoning the next run.
+            raise OSError(
+                f"could not delete {p} - a process still holds files open in it"
+            )
+
+
+def is_delta_table(target: str | Path) -> bool:
+    """True only if `target` is a Delta table with at least one commit.
+
+    Use this, never `Path(...).exists()`, to decide whether a table needs
+    (re)generating: an empty directory left by an interrupted run or a
+    Windows-blocked `reset()` passes an existence check but is not a table.
+    """
+    log = Path(target) / "_delta_log"
+    return log.is_dir() and any(log.glob("*.json"))
 
 
 # ── Convenience: swap to S3 / MinIO with one env var ──

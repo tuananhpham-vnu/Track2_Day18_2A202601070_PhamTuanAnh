@@ -20,7 +20,7 @@ from pathlib import Path
 import polars as pl
 import duckdb
 from deltalake import DeltaTable, write_deltalake
-from lakehouse import path, reset
+from lakehouse import is_delta_table, path, reset
 
 BRONZE = path("bronze", "llm_calls_raw")
 SILVER = path("silver", "llm_calls")
@@ -29,7 +29,9 @@ GOLD   = path("gold",   "llm_daily_metrics")
 # Self-healing pre-req (same pattern as NB7/NB8). Without this, skipping
 # `make data` surfaces as a raw `Os { code: 2, kind: NotFound }` from the Rust
 # layer — technically correct, useless to a student.
-if not Path(BRONZE).exists():
+# `is_delta_table`, not `.exists()`: an interrupted run can leave the directory
+# behind with an empty `_delta_log`, which exists but is not readable.
+if not is_delta_table(BRONZE):
     print("Bronze not found — running scripts/generate_data_lite.py first ...")
     import generate_data_lite
 
