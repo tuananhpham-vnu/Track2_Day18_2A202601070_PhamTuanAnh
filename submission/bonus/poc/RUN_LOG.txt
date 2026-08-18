@@ -1,0 +1,23 @@
+chunks: 5,000 rows · v0
+thân chủ matter_0007 sở hữu 100 chunk
+schema sau evolution: ['chunk_id', 'subject_id', 'emb_v1', 'emb_v2']
+số row không đổi: 5,000  ← thêm cột KHÔNG rewrite dữ liệu
+backfill 3/5 batch → còn 2,000 row chưa có emb_v2
+gate trước khi xong: CHẶN cutover  ← đúng
+gate sau khi xong : cho qua  (0 row NULL)
+bảng: 5,000 → 4,900 row (xoá 100)
+
+CDF phát 100 delete event kèm chunk_id cần evict
+  index rebuild ngây thơ  → 100 chunk đã xoá VẪN truy hồi được  ✗ vi phạm
+  index reconcile bằng CDF → 0 chunk đã xoá truy hồi được       ✓
+alias live → emb_v2; schema sau khi drop: ['chunk_id', 'subject_id', 'emb_v2']
+  [PASS] thêm cột không rewrite row
+  [PASS] gate chặn khi backfill dở
+  [PASS] gate mở khi backfill xong
+  [PASS] CDF phát đủ delete event
+  [PASS] rebuild ngây thơ làm sống lại
+  [PASS] rebuild theo CDF không sống lại
+  [PASS] cutover đổi alias sang emb_v2
+  [PASS] cột cũ đã drop
+
+PoC complete.

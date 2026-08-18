@@ -20,6 +20,10 @@ Log thô: [`screenshots/03_gates.txt`](screenshots/03_gates.txt).
   (Thư mục `notebooks/` ở repo root bị `.gitignore` loại `*.ipynb`, nên bản đã
   thực thi được đặt ở đây để thực sự vào PR.)
 * [`REFLECTION.md`](REFLECTION.md) — Top 5 Anti-Patterns, 199 từ.
+* [`bonus/ARCHITECTURE.md`](bonus/ARCHITECTURE.md) — **Bonus Challenge, Topic D**
+  (multimodal RAG trên 10 triệu document pháp lý): 7 quyết định kèm 15
+  alternative đã loại, 4 failure mode, chi phí back-of-envelope.
+  PoC chạy được: [`bonus/poc/`](bonus/poc/) — 8/8 PASS.
 * [`screenshots/01_tree_lakehouse.txt`](screenshots/01_tree_lakehouse.txt) — `tree _lakehouse/`
 * [`screenshots/02_delta_log_commit.txt`](screenshots/02_delta_log_commit.txt) — nội dung một `_delta_log/*.json`
 * [`screenshots/03_gates.txt`](screenshots/03_gates.txt) — output cả 3 cổng
